@@ -20,7 +20,8 @@ const  Gameboard  = (function(){
   return {getBoard, placeMarker, resetBoard};
   
 })();
-console.log(Gameboard);
+
+console.log(Gameboard.getBoard());
 
 
 function Player (name, marker) {
@@ -48,24 +49,67 @@ const GameController = (function(){
   };
 
   const switchPlayer = () => {
-    currentPlayerIndex= currentPlayerIndex === 0 ? 1 : 0;
+    currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
   };
 
   const checkWinner = () => {
+    const board = Gameboard.getBoard();
 
+    for(let i = 0; i < winPattern.length; i++){
+      const [a, b, c] = winPattern[i];
+
+      if(
+        board[a] !== "" &&
+        board[a] === board[b] &&
+        board[b] === board[c]
+      ){
+        return true;
+      }
+    }
+
+    return false;
   };
 
   const checkTie = () => {
+    return !checkWinner() && Gameboard.getBoard().every(cell => cell !== "");
+  };
+
+  const playerTurn = (index) => {
+    if(isGameOver) return;
+
+    const currentPlayer = getCurrentPlayer();
+    const moveMade = Gameboard.placeMarker(index, currentPlayer.marker);
+
+    if(!moveMade) return;
+
+    if(checkWinner()){
+      console.log(`${currentPlayer.name} wins!`);
+      isGameOver = true;
+
+      return;
+    }
+
+    if(checkTie()){
+      console.log("It's a tie!");
+      isGameOver = true;
+
+      return;
+    }
+
+    switchPlayer();
 
   };
 
-  const playerTurn = () => {
-    
-  };
+  return {playerTurn};
   
 })();
 
+GameController.playerTurn(0); // X
+GameController.playerTurn(3); // O
+GameController.playerTurn(1); // X
+GameController.playerTurn(4); // O
+GameController.playerTurn(2); // X
 
 const displayController = (function(){
 
-}());
+})();
