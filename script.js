@@ -111,8 +111,8 @@ const displayController = (function(){
   const renderBoard = () => {
     boardDiv.textContent = "";
 
-    const boardCell = document.createElement("div");
-    boardCell.classList.add("board-cell");
+    // const boardCell = document.createElement("div");
+    // boardCell.classList.add("board-cell");
 
     Gameboard.getBoard().forEach((marker, index) => {
       const cell = document.createElement("div");
@@ -120,9 +120,19 @@ const displayController = (function(){
       cell.dataset.index = index;
       cell.textContent = marker;
 
-      boardCell.appendChild(cell);
+      cell.addEventListener("click", () => {
+        GameController.playerTurn(index);
+
+        renderBoard();
+      });
+
+      boardDiv.appendChild(cell);
     });
 
-    boardDiv.appendChild(boardCell);
   }
+
+  return {renderBoard};
+
 })();
+
+displayController.renderBoard();
