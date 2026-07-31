@@ -21,8 +21,6 @@ const  Gameboard  = (function(){
   
 })();
 
-console.log(Gameboard.getBoard());
-
 
 function Player (name, marker) {
   return {name, marker};
@@ -100,13 +98,19 @@ const GameController = (function(){
 
   };
 
-  return {playerTurn};
+  return {
+    playerTurn,
+    getCurrentPlayer,
+    checkWinner,
+    checkTie
+  };
   
 })();
 
 
 const displayController = (function(){
   const boardDiv = document.querySelector(".board");
+  const statusDiv = document.querySelector(".status");
 
   const renderBoard = () => {
     boardDiv.textContent = "";
@@ -125,6 +129,8 @@ const displayController = (function(){
 
         renderBoard();
       });
+
+      statusDiv.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
 
       boardDiv.appendChild(cell);
     });

@@ -4,12 +4,19 @@
   box-sizing: border-box;
 }
 
+.main h1{
+  text-align: center;
+}
+
+.main p{
+  text-align: center;
+}
+
 .board{
   display: grid;
   grid-template-columns: 100px 100px 100px;
   justify-content: center;
   gap: 2px;
-  border: 3px solid red;
 }
 
 .board .cell{
