@@ -4,19 +4,29 @@
   box-sizing: border-box;
 }
 
+.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .main h1{
   text-align: center;
+  padding-bottom: 20px;
 }
 
 .main p{
   text-align: center;
+  font-weight: 700;
 }
 
-.board{
+.main .board{
   display: grid;
   grid-template-columns: 100px 100px 100px;
   justify-content: center;
   gap: 2px;
+  padding: 20px 0;
 }
 
 .board .cell{
@@ -31,4 +41,17 @@
   font-size: 3rem;
   font-weight: 700;
   opacity: .5;
+}
+
+.main input{
+  padding: 10px 8px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.main button{
+  padding: 8px 16px;
+  font-weight: 700;
+  margin-top: 10px;
+  cursor: pointer;
 }

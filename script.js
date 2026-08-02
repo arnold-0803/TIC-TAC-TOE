@@ -1,3 +1,4 @@
+// THE GAME BOARD
 const  Gameboard  = (function(){
   let board = ["", "", "", "", "", "", "", "", ""];
 
@@ -22,11 +23,13 @@ const  Gameboard  = (function(){
 })();
 
 
+// THE PLAYER FACTORY
 function Player (name, marker) {
   return {name, marker};
 };
 
 
+// THE GAME CONTROLLER
 const GameController = (function(){
   let players = [
     Player("Player X", "X"),
@@ -35,6 +38,7 @@ const GameController = (function(){
 
   let currentPlayerIndex = 0;
   let isGameOver = false;
+  let gameStatus = `${players[currentPlayerIndex].name}'s turn`;
 
   const winPattern = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -81,14 +85,14 @@ const GameController = (function(){
     if(!moveMade) return;
 
     if(checkWinner()){
-      console.log(`${currentPlayer.name} wins!`);
+      gameStatus = (`${currentPlayer.name} wins!`);
       isGameOver = true;
 
       return;
     }
 
     if(checkTie()){
-      console.log("It's a tie!");
+      gameStatus = ("It's a tie!");
       isGameOver = true;
 
       return;
@@ -96,27 +100,53 @@ const GameController = (function(){
 
     switchPlayer();
 
+    gameStatus = `${getCurrentPlayer().name}'s turn`;
+
   };
+
+  const getGameStatus = () => {
+    return gameStatus;
+  }
+
+  const restartGame = () => {
+    Gameboard.resetBoard();
+    currentPlayerIndex = 0;
+    isGameOver = false;
+    gameStatus = `${getCurrentPlayer().name}'s turn`;
+  };
+
+  const setPlayers = (name1, name2) => {
+    players = [
+      Player(name1 || "Player X", "X"),
+      Player(name2 || "Player O", "O")
+    ];
+
+    gameStatus = `${getCurrentPlayer().name}'s turn`;
+  }
 
   return {
     playerTurn,
-    getCurrentPlayer,
-    checkWinner,
-    checkTie
+    getGameStatus,
+    restartGame,
+    setPlayers
   };
   
 })();
 
 
+// THE DISPLAY CONTROLLER
 const displayController = (function(){
   const boardDiv = document.querySelector(".board");
   const statusDiv = document.querySelector(".status");
+  const restartBtn = document.querySelector(".restart");
+  const startBtn = document.querySelector(".start-game");
+  const playerOne = document.getElementById("player1");
+  const playerTwo = document.getElementById("player2");
 
   const renderBoard = () => {
     boardDiv.textContent = "";
 
-    // const boardCell = document.createElement("div");
-    // boardCell.classList.add("board-cell");
+    statusDiv.textContent = GameController.getGameStatus();
 
     Gameboard.getBoard().forEach((marker, index) => {
       const cell = document.createElement("div");
@@ -130,12 +160,23 @@ const displayController = (function(){
         renderBoard();
       });
 
-      statusDiv.textContent = `${GameController.getCurrentPlayer().name}'s turn`;
-
       boardDiv.appendChild(cell);
     });
-
   }
+
+  startBtn.addEventListener("click", () => {
+    const name1 = playerOne.value;
+    const name2 = playerTwo.value;
+
+    GameController.setPlayers(name1, name2)
+    GameController.restartGame();
+    renderBoard();
+  });
+
+  restartBtn.addEventListener("click", () => {
+    GameController.restartGame();
+    renderBoard()
+  });
 
   return {renderBoard};
 
