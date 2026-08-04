@@ -138,7 +138,7 @@ const GameController = (function(){
 const displayController = (function(){
   const boardDiv = document.querySelector(".board");
   const statusDiv = document.querySelector(".status");
-  const restartBtn = document.querySelector(".restart");
+  const resetBtn = document.querySelector(".reset");
   const startBtn = document.querySelector(".start-game");
   const playerOne = document.getElementById("player1");
   const playerTwo = document.getElementById("player2");
@@ -173,7 +173,7 @@ const displayController = (function(){
     renderBoard();
   });
 
-  restartBtn.addEventListener("click", () => {
+  resetBtn.addEventListener("click", () => {
     GameController.restartGame();
     renderBoard()
   });
